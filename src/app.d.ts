@@ -9,4 +9,18 @@ declare global {
 	}
 }
 
-export {};
+export { };
+
+export interface NameSpace {
+	NAME: string;
+	STATUS: string;
+	AGE: string;
+}
+export interface Pod {
+	NAMESPACE: string;
+	NAME: string;
+	READY: string;
+	STATUS: string;
+	RESTARTS: string;
+	AGE: string;
+}

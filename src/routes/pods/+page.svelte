@@ -2,16 +2,16 @@
     import { enhance } from "$app/forms";
     import { invalidate } from "$app/navigation";
     import { onMount } from "svelte";
-    import type { NameSpace } from "../app";
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
     import Checkbox from "@smui/checkbox";
+    import type { NameSpace, Pod } from "../../app";
 
-    export let data: { namespaces: NameSpace[] };
-    let selected: NameSpace[] = [];
+    export let data: { pods: Pod[]; namespaces: NameSpace[] };
+    let selected: Pod[] = [];
     function subscribe() {
-        const sse = new EventSource("/");
+        const sse = new EventSource("/pods");
         sse.onmessage = () => {
-            invalidate("namespaces");
+            invalidate("pods");
         };
         return () => sse.close();
     }
@@ -30,7 +30,7 @@
         </Row>
     </Head>
     <Body>
-        {#each data.namespaces as option}
+        {#each data.pods as option}
             <Row>
                 <Cell checkbox>
                     <Checkbox
