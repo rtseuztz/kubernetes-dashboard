@@ -1,3 +1,4 @@
+import { error } from "@sveltejs/kit"
 import { spawn, execSync } from "child_process"
 import type EventEmitter from "node:events"
 export type CustomEmmiter = EventEmitter & { notify: () => void }
@@ -16,9 +17,16 @@ export function tableToJSON(tbl: string): any[] {
     return retArr
 }
 export function initializeResource(resource: string, allNamespaces = false): any[] {
-    const res = execSync(`kubectl get ${resource} ${allNamespaces ? "-A" : ""}`, { 'shell': 'powershell.exe' })
-    const resJson = tableToJSON(res.toString())
-    return resJson
+    try {
+        const res = execSync(`kubectl get ${resource} ${allNamespaces ? "-A" : ""}`, { 'shell': 'powershell.exe' })
+        const resJson = tableToJSON(res.toString())
+        return resJson
+    } catch (e: any) {
+        throw error(400, {
+            message: e.message,
+        })
+    }
+
 }
 export function watchResource(resource: string, send_objs: (objs: any[]) => void, allNamespaces = false) {
     const cmd = spawn("kubectl", ["get", resource, allNamespaces ? "-A" : "", "-w"], { 'shell': 'powershell.exe' })

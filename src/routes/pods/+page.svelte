@@ -18,8 +18,12 @@
         };
         return () => sse.close();
     }
-    function clicked(e: CustomEvent) {
-        console.log(e);
+    function clicked(e: any) {
+        const params: string[] = e?.target?.parentElement
+            ?.getAttribute("keyparams")
+            .split(",");
+        const namespace = params[0];
+        const pod = params[1];
     }
     onMount(subscribe);
 </script>
@@ -50,12 +54,17 @@
                     />
                 </Cell>
                 <Separator />
-                <Cell on:click={clicked}>{option.NAMESPACE}</Cell>
-                <Cell on:click={clicked}>{option.NAME}</Cell>
-                <Cell on:click={clicked}>{option.STATUS}</Cell>
-                <Cell on:click={clicked}>{option.AGE}</Cell>
-                <Cell on:click={clicked}>{option.RESTARTS}</Cell>
-                <Cell on:click={clicked}>{option.READY}</Cell>
+                <Cell>
+                    <a
+                        href={`/namespaces/${option.NAMESPACE}/pods/${option.NAME}`}
+                        >{option.NAMESPACE}</a
+                    ></Cell
+                >
+                <Cell>{option.NAME}</Cell>
+                <Cell>{option.STATUS}</Cell>
+                <Cell>{option.AGE}</Cell>
+                <Cell>{option.RESTARTS}</Cell>
+                <Cell>{option.READY}</Cell>
             </Row>
         {/each}
     </Body>
@@ -66,4 +75,7 @@
         .join(", ")}</pre>
 
 <style>
+    a {
+        text-decoration: none;
+    }
 </style>
