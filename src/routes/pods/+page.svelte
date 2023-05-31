@@ -18,8 +18,8 @@
         };
         return () => sse.close();
     }
-    function clicked() {
-        console.log("clicked");
+    function clicked(e: CustomEvent) {
+        console.log(e);
     }
     onMount(subscribe);
 </script>
@@ -41,7 +41,7 @@
     </Head>
     <Body>
         {#each data.pods as option}
-            <Row>
+            <Row keyparams={option.NAME + "," + option.NAMESPACE}>
                 <Cell checkbox>
                     <Checkbox
                         bind:group={selected}
