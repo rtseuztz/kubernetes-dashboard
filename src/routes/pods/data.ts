@@ -11,7 +11,7 @@ export class PodEvent extends EventEmitter {
     }
 }
 
-pods = initializeResource("pods")
+pods = initializeResource("pods", true)
 
 export function send(pds: Pod[]) {
     console.log("emitting")

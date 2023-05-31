@@ -5,6 +5,7 @@
     import type { NameSpace } from "../app";
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
     import Checkbox from "@smui/checkbox";
+    import Separator from "@smui/list/src/Separator.svelte";
 
     export let data: { namespaces: NameSpace[] };
     let selected: NameSpace[] = [];
@@ -24,6 +25,7 @@
             <Cell checkbox>
                 <Checkbox />
             </Cell>
+            <Cell />
             <Cell>Name</Cell>
             <Cell>Status</Cell>
             <Cell>Age</Cell>
@@ -39,6 +41,7 @@
                         valueKey={option.NAME}
                     />
                 </Cell>
+                <Separator />
                 <Cell>{option.NAME}</Cell>
                 <Cell>{option.STATUS}</Cell>
                 <Cell numeric>{option.AGE}</Cell>

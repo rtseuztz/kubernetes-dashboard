@@ -19,6 +19,7 @@
 		"@smui/data-table": "^7.0.0-beta.8",
 		"@smui/drawer": "^7.0.0-beta.8",
 		"@smui/list": "^7.0.0-beta.8",
+		"@smui/tooltip": "^7.0.0-beta.8",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.5.0",
 		"@types/node": "^20.2.4",

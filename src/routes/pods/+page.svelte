@@ -5,6 +5,9 @@
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
     import Checkbox from "@smui/checkbox";
     import type { NameSpace, Pod } from "../../app";
+    import Separator from "@smui/list/src/Separator.svelte";
+    import Tooltip, { Wrapper } from "@smui/tooltip";
+    import { Content } from "@smui/drawer";
 
     export let data: { pods: Pod[]; namespaces: NameSpace[] };
     let selected: Pod[] = [];
@@ -15,6 +18,9 @@
         };
         return () => sse.close();
     }
+    function clicked() {
+        console.log("clicked");
+    }
     onMount(subscribe);
 </script>
 
@@ -24,9 +30,13 @@
             <Cell checkbox>
                 <Checkbox />
             </Cell>
+            <Cell />
+            <Cell>Namespace</Cell>
             <Cell>Name</Cell>
             <Cell>Status</Cell>
             <Cell>Age</Cell>
+            <Cell>Restarts</Cell>
+            <Cell>Ready</Cell>
         </Row>
     </Head>
     <Body>
@@ -39,9 +49,13 @@
                         valueKey={option.NAME}
                     />
                 </Cell>
-                <Cell>{option.NAME}</Cell>
-                <Cell>{option.STATUS}</Cell>
-                <Cell numeric>{option.AGE}</Cell>
+                <Separator />
+                <Cell on:click={clicked}>{option.NAMESPACE}</Cell>
+                <Cell on:click={clicked}>{option.NAME}</Cell>
+                <Cell on:click={clicked}>{option.STATUS}</Cell>
+                <Cell on:click={clicked}>{option.AGE}</Cell>
+                <Cell on:click={clicked}>{option.RESTARTS}</Cell>
+                <Cell on:click={clicked}>{option.READY}</Cell>
             </Row>
         {/each}
     </Body>

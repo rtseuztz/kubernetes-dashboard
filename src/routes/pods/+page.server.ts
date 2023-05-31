@@ -1,4 +1,4 @@
-import { pods } from "./data";
+import { pods } from './data';
 
 export const load = ({ depends }) => {
     depends('pods');

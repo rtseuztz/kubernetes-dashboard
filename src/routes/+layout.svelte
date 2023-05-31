@@ -7,7 +7,7 @@
         Subtitle,
         Scrim,
     } from "@smui/drawer";
-    import Button, { Label } from "@smui/button";
+    import Button, { Icon, Label } from "@smui/button";
     import List, {
         Item,
         Text,
@@ -15,14 +15,20 @@
         Separator,
         Subheader,
     } from "@smui/list";
+    import { page } from "$app/stores";
+    import { browser } from "$app/environment";
 
-    let open = false;
-    let active = "Inbox";
-
+    let open = true;
+    let active = "Home";
+    let path: string = $page.url.pathname;
     function setActive(value: string) {
         active = value;
         //open = false;
     }
+
+    let tempActive = path.split("/")[1] || "Home";
+    tempActive = tempActive.charAt(0).toUpperCase() + tempActive.substring(1);
+    active = tempActive;
 </script>
 
 <div class="drawer-container">
@@ -117,7 +123,7 @@
     <AppContent class="app-content">
         <main class="main-content">
             <Button on:click={() => (open = !open)}>
-                <Label>Toggle Drawer</Label>
+                <Label on:click={() => (open = !open)}>Menu</Label>
             </Button>
             <br />
             <pre class="status">Active: {active}</pre>
