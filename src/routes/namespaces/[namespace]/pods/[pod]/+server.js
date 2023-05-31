@@ -1,19 +1,17 @@
-import { PodEvent, pod_events, pods } from "./data";
-
+import { _PodEvent, _pod, _pod_events } from "./+page.server";
 export const GET = () => {
-    console.log("pods event")
-
-    const podevent = new PodEvent();
-    pod_events.push(podevent);
+    const podevent = new _PodEvent();
+    _pod_events.push(podevent);
     const stream = new ReadableStream({
         start(controller) {
             podevent.on('msg', () => {
-                controller.enqueue('event: message\ndata:\n\n');
+                console.log('msg')
+                controller.enqueue(`event: message\ndata: ${JSON.stringify(_pod)} \n\n`);
             });
         },
         cancel() {
-            const nsindex = pod_events.indexOf(podevent);
-            if (~nsindex) pod_events.splice(nsindex, 1);
+            const nsindex = _pod_events.indexOf(podevent);
+            if (~nsindex) _pod_events.splice(nsindex, 1);
         }
     });
 

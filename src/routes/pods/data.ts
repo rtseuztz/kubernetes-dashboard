@@ -11,14 +11,13 @@ export class PodEvent extends EventEmitter {
     }
 }
 
-pods = initializeResource("pods", true)
+pods = initializeResource("pods")
 
 export function send(pds: Pod[]) {
-    console.log("emitting")
     pods = pds;
     for (const event of pod_events) {
         event.notify();
     }
 }
-watchResource("pod", send, true)
+watchResource("pod", send)
 // use the terminal to watch for kubernetes namespaces. Notify the client when a new namespace is created.

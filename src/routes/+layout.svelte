@@ -16,7 +16,6 @@
         Subheader,
     } from "@smui/list";
     import { page } from "$app/stores";
-    import { browser } from "$app/environment";
 
     let open = true;
     let active = "Home";
@@ -25,10 +24,13 @@
         active = value;
         //open = false;
     }
-
-    let tempActive = path.split("/")[1] || "Home";
-    tempActive = tempActive.charAt(0).toUpperCase() + tempActive.substring(1);
-    active = tempActive;
+    $: {
+        path = $page.url.pathname;
+        let tempActive = path.split("/")[1] || "Home";
+        tempActive =
+            tempActive.charAt(0).toUpperCase() + tempActive.substring(1);
+        active = tempActive;
+    }
 </script>
 
 <div class="drawer-container">

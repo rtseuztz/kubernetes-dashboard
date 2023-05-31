@@ -54,13 +54,13 @@
                     />
                 </Cell>
                 <Separator />
+                <Cell>{option.NAMESPACE}</Cell>
                 <Cell>
                     <a
                         href={`/namespaces/${option.NAMESPACE}/pods/${option.NAME}`}
-                        >{option.NAMESPACE}</a
-                    ></Cell
+                        >{option.NAME}
+                    </a></Cell
                 >
-                <Cell>{option.NAME}</Cell>
                 <Cell>{option.STATUS}</Cell>
                 <Cell>{option.AGE}</Cell>
                 <Cell>{option.RESTARTS}</Cell>
