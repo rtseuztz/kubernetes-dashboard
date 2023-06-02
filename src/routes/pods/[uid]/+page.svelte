@@ -6,8 +6,8 @@
     <div id="header-content">
         <h1>{data.pod?.metadata.name}</h1>
         <div>
-            <a href="/pods/{data.pod?.metadata.name}/edit">edit</a>
-            <a href="/pods/{data.pod?.metadata.name}/delete">delete</a>
+            <a href="/pods/{data.pod?.metadata.uid}/edit">edit</a>
+            <a href="/pods/{data.pod?.metadata.uid}/delete">delete</a>
         </div>
     </div>
 </header>

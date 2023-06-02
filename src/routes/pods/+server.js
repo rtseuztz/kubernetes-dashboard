@@ -1,8 +1,6 @@
 import { PodEvent, pod_events } from "./data";
 
 export const GET = () => {
-    console.log("pods event")
-
     const podevent = new PodEvent();
     pod_events.push(podevent);
     const stream = new ReadableStream({

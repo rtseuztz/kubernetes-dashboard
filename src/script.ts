@@ -22,7 +22,6 @@ export function tableToJSON(tbl: string): any[] {
 }
 export function initializeResource(resource: string, namespace = "", resourceName = ""): any {
     try {
-        console.log(`kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? " -A " : ` -n=${namespace} `}`)
         const res = execSync(`kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? " -A " : ` -n=${namespace} `}`, { 'shell': 'powershell.exe' })
         const resJson = JSON.parse(res.toString())
         return resJson.items

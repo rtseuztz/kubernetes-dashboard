@@ -33,6 +33,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"cli-table-2-json": "^1.0.13"
+		"cli-table-2-json": "^1.0.13",
+		"yaml": "^2.3.1"
 	}
 }
