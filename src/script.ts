@@ -22,9 +22,10 @@ export function tableToJSON(tbl: string): any[] {
 }
 export function initializeResource(resource: string, namespace = "", resourceName = ""): any {
     try {
-        const res = execSync(`kubectl get ${resource} ${resourceName ? resourceName + " -o=json" : ""} ${namespace === "" ? " -A " : ` -n=${namespace} `}`, { 'shell': 'powershell.exe' })
-        const resJson = convertCLIResToData(res, resourceName ? CLIReturnType.JSON : CLIReturnType.TABLE)
-        return resJson
+        console.log(`kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? " -A " : ` -n=${namespace} `}`)
+        const res = execSync(`kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? " -A " : ` -n=${namespace} `}`, { 'shell': 'powershell.exe' })
+        const resJson = JSON.parse(res.toString())
+        return resJson.items
     } catch (e: any) {
         throw error(400, {
             message: e.message,
@@ -49,15 +50,15 @@ export function watchResource(resource: string, send_objs: (objs: any) => void, 
         resource]
     if (resourceName !== "") {
         argArr.push(resourceName)
-        argArr.push("-o=json")
     }
+    argArr.push("-o=json")
     argArr.push(namespace === "" ? "-A" : `-n=${namespace}`)
     argArr.push("-w")
     const cmd = spawn("kubectl", argArr, { 'shell': 'powershell.exe' })
     cmd.stdout.on('data', function (data) {
-        data = execSync(`kubectl get ${resource} ${resourceName ? resourceName + " -o=json" : ""} ${namespace === "" ? "-A" : `-n=${namespace}`}`, { 'shell': 'powershell.exe' })
-        const json = convertCLIResToData(data, resourceName ? CLIReturnType.JSON : CLIReturnType.TABLE)
-        send_objs(json)
+        data = execSync(`kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? "-A" : `-n=${namespace}`}`, { 'shell': 'powershell.exe' })
+        const json = JSON.parse(data.toString())
+        send_objs(json.items)
     });
     cmd.stderr.on('data', function (data) {
     });

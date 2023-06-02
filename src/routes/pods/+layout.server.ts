@@ -1,7 +1,7 @@
 import { pods } from './data';
 
-export const load = ({ depends }) => {
+export async function load({ depends }) {
     depends('pods');
-    console.log("reloading pods")
+    console.log(pods.length)
     return { pods };
 };

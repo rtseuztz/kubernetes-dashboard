@@ -36,15 +36,15 @@ export interface PodJSON {
 
 export interface Metadata {
 	creationTimestamp: string
-	labels: Labels
+	labels: Label[]
 	name: string
 	namespace: string
 	resourceVersion: string
 	uid: string
 }
 
-export interface Labels {
-	run: string
+export interface Label {
+	label: string
 }
 
 export interface Spec {
@@ -178,4 +178,37 @@ export interface Running {
 
 export interface PodIp {
 	ip: string
+}
+
+
+// namespacces 
+
+
+
+export interface NameSpaceJSON {
+	apiVersion: string
+	kind: string
+	metadata: Metadata
+	spec: Spec
+	status: Status
+}
+
+export interface Metadata {
+	creationTimestamp: string
+	labels: Labels
+	name: string
+	resourceVersion: string
+	uid: string
+}
+
+export interface Labels {
+	"kubernetes.io/metadata.name": string
+}
+
+export interface Spec {
+	finalizers: string[]
+}
+
+export interface Status {
+	phase: string
 }

@@ -1,9 +1,9 @@
 import { EventEmitter } from 'node:events';
-import type { Pod } from '../../app';
+import type { Pod, PodJSON } from '../../app';
 import { initializeResource, watchResource } from '../../script';
 
 
-export let pods: Pod[] = [];
+export let pods: PodJSON[] = [];
 export const pod_events: PodEvent[] = [];
 export class PodEvent extends EventEmitter {
     notify() {
@@ -13,7 +13,7 @@ export class PodEvent extends EventEmitter {
 
 pods = initializeResource("pods")
 
-export function send(pds: Pod[]) {
+export function send(pds: PodJSON[]) {
     pods = pds;
     for (const event of pod_events) {
         event.notify();

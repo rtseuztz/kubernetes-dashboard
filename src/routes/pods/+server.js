@@ -1,4 +1,4 @@
-import { PodEvent, pod_events, pods } from "./data";
+import { PodEvent, pod_events } from "./data";
 
 export const GET = () => {
     console.log("pods event")

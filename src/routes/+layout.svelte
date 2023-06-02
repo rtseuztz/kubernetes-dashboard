@@ -63,7 +63,7 @@
                     >
                     <Text>Pods</Text>
                 </Item>
-                <Item
+                <!-- <Item
                     href="javascript:void(0)"
                     on:click={() => setActive("Sent Mail")}
                     activated={active === "Sent Mail"}
@@ -115,7 +115,7 @@
                         >bookmark</Graphic
                     >
                     <Text>Work</Text>
-                </Item>
+                </Item> -->
             </List>
         </Content>
     </Drawer>
@@ -129,12 +129,20 @@
             </Button>
             <br />
             <pre class="status">Active: {active}</pre>
-            <slot />
+            <content>
+                <slot />
+            </content>
         </main>
     </AppContent>
 </div>
 
 <style>
+    content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
     /* These classes are only needed because the
     drawer is in a container on the page. */
     .drawer-container {

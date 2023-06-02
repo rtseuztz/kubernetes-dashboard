@@ -7,7 +7,7 @@
     import Checkbox from "@smui/checkbox";
     import Separator from "@smui/list/src/Separator.svelte";
 
-    export let data: { namespaces: NameSpace[] };
+    export let data;
     let selected: NameSpace[] = [];
     function subscribe() {
         const sse = new EventSource("/");
@@ -27,7 +27,6 @@
             </Cell>
             <Cell />
             <Cell>Name</Cell>
-            <Cell>Status</Cell>
             <Cell>Age</Cell>
         </Row>
     </Head>
@@ -38,13 +37,16 @@
                     <Checkbox
                         bind:group={selected}
                         value={option}
-                        valueKey={option.NAME}
+                        valueKey={option.metadata.name}
                     />
                 </Cell>
                 <Separator />
-                <Cell>{option.NAME}</Cell>
-                <Cell>{option.STATUS}</Cell>
-                <Cell numeric>{option.AGE}</Cell>
+                <Cell>{option.metadata.name}</Cell>
+                <Cell numeric
+                    >{new Date(
+                        option.metadata.creationTimestamp
+                    ).toLocaleString()}</Cell
+                >
             </Row>
         {/each}
     </Body>

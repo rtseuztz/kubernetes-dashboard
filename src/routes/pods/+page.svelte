@@ -4,12 +4,12 @@
     import { onMount } from "svelte";
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
     import Checkbox from "@smui/checkbox";
-    import type { NameSpace, Pod } from "../../app";
+    import type { NameSpace, Pod, PodJSON } from "../../app";
     import Separator from "@smui/list/src/Separator.svelte";
     import Tooltip, { Wrapper } from "@smui/tooltip";
     import { Content } from "@smui/drawer";
 
-    export let data: { pods: Pod[]; namespaces: NameSpace[] };
+    export let data: { pods: PodJSON[] };
     let selected: Pod[] = [];
     function subscribe() {
         const sse = new EventSource("/pods");
@@ -17,13 +17,6 @@
             invalidate("pods");
         };
         return () => sse.close();
-    }
-    function clicked(e: any) {
-        const params: string[] = e?.target?.parentElement
-            ?.getAttribute("keyparams")
-            .split(",");
-        const namespace = params[0];
-        const pod = params[1];
     }
     onMount(subscribe);
 </script>
@@ -38,33 +31,36 @@
             <Cell>Namespace</Cell>
             <Cell>Name</Cell>
             <Cell>Status</Cell>
-            <Cell>Age</Cell>
-            <Cell>Restarts</Cell>
-            <Cell>Ready</Cell>
+            <Cell>Created On</Cell>
         </Row>
     </Head>
     <Body>
         {#each data.pods as option}
-            <Row keyparams={option.NAME + "," + option.NAMESPACE}>
+            <Row
+                keyparams={option.metadata.name +
+                    "," +
+                    option.metadata.namespace}
+            >
                 <Cell checkbox>
                     <Checkbox
                         bind:group={selected}
                         value={option}
-                        valueKey={option.NAME}
+                        valueKey={option.metadata.name}
                     />
                 </Cell>
                 <Separator />
-                <Cell>{option.NAMESPACE}</Cell>
+                <Cell>{option.metadata.namespace}</Cell>
                 <Cell>
-                    <a
-                        href={`/namespaces/${option.NAMESPACE}/pods/${option.NAME}`}
-                        >{option.NAME}
+                    <a href={`/pods/${option.metadata.uid}`}
+                        >{option.metadata.name}
                     </a></Cell
                 >
-                <Cell>{option.STATUS}</Cell>
-                <Cell>{option.AGE}</Cell>
-                <Cell>{option.RESTARTS}</Cell>
-                <Cell>{option.READY}</Cell>
+                <Cell>{option.status.conditions[0].type}</Cell>
+                <Cell
+                    >{new Date(
+                        option.metadata.creationTimestamp
+                    ).toLocaleString()}</Cell
+                >
             </Row>
         {/each}
     </Body>
