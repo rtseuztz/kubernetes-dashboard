@@ -36,16 +36,14 @@ export interface PodJSON {
 
 export interface Metadata {
 	creationTimestamp: string
-	labels: Label[]
+	labels: { [key: string]: string }
+
 	name: string
 	namespace: string
 	resourceVersion: string
 	uid: string
 }
 
-export interface Label {
-	label: string
-}
 
 export interface Spec {
 	containers: Container[]
@@ -206,7 +204,7 @@ export interface Labels {
 }
 
 export interface Spec {
-	finalizers: string[]
+	finalizers?: string[]
 }
 
 export interface Status {

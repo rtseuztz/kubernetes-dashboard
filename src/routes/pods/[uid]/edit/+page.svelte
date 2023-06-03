@@ -6,14 +6,18 @@
 </script>
 
 <div>
-    <pre>
-{yaml}
-    </pre>
+    <textarea>
+        <pre>
+        {yaml}
+        </pre>
+    </textarea>
 </div>
 
 <style>
-    div {
+    div,
+    textarea {
         width: 100%;
+        height: 100%;
     }
     pre {
         background-color: #f5f5f5;
