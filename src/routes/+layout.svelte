@@ -22,19 +22,17 @@
         //open = false;
     }
     let pathArr: string[] = path.split("/");
+    let routeArr: string[] = [];
     $: {
         path = $page.url.pathname;
         pathArr = path.split("/").filter((p) => p !== "");
-        let tempActive = path.split("/")[1] || "Home";
-        tempActive =
-            tempActive.charAt(0).toUpperCase() + tempActive.substring(1);
-        active = tempActive;
+        //route arr is all the previous + the current
+        routeArr = pathArr.slice(0, pathArr.indexOf(active) + 1);
     }
 
     function subscribe() {
         const sse = new EventSource("/");
         sse.onmessage = (ev: MessageEvent<string>) => {
-            console.log(ev);
             invalidate(ev.data);
         };
         return () => sse.close();
@@ -73,12 +71,11 @@
                                         ><a
                                             href={"/" +
                                                 pathArr
-                                                    .join("/")
-                                                    .substring(
-                                                        pathArr
-                                                            .join("")
-                                                            .indexOf(p)
-                                                    )}>{p}</a
+                                                    .slice(
+                                                        0,
+                                                        pathArr.indexOf(p) + 1
+                                                    )
+                                                    .join("/")}>{p}</a
                                         ></Title
                                     >
                                 </div>

@@ -8,7 +8,6 @@
     import { onMount } from "svelte";
     export let path = $page.url.pathname;
     const namespace = $page.params.namespace;
-    console.log($pods);
     function rowMouseOver(e: CustomEvent<any>) {
         const row = e.currentTarget as HTMLElement;
         const link = row.querySelector("a.link-cell") as HTMLElement;

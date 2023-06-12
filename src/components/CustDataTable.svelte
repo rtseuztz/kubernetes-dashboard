@@ -13,7 +13,6 @@
      */
     export let cellData: string[][];
     export let pipes: custFunc[];
-    console.log(cellData);
     // the data obj is an object. it uses cellData to extract the data attributes
     let data: any[][];
     data = dataObj.map((obj) => {
@@ -23,7 +22,6 @@
             cell.forEach((c) => {
                 temp = temp[c];
             });
-            console.log(temp);
             arr.push(temp);
         });
         return arr;

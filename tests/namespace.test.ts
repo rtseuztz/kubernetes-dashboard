@@ -17,10 +17,8 @@ test.afterEach(async ({ page }) => {
 })
 
 test('the user loads into the home page and sees namespaces', async ({ page }) => {
-    console.log(await page.getByRole('table'))
     await page.locator('table').first().waitFor()
     const tableRowsCount = await page.getByRole('table').getByRole('row').count();
-    console.log(tableRowsCount)
     expect(tableRowsCount).toBe(rows.length);
 });
 test('the user loads into the home page and sees namespaces, and one is added', async ({ page }) => {

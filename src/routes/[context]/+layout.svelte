@@ -6,7 +6,6 @@
     function subscribe() {
         const sse = new EventSource("/");
         sse.onmessage = (ev: MessageEvent<string>) => {
-            console.log(ev);
             invalidate(ev.data);
         };
         return () => sse.close();

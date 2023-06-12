@@ -13,7 +13,6 @@
     let processDate = (d: Date) => {
         return moment(d).fromNow();
     };
-    console.log(processDate(new Date()));
     export let path = $page.url.pathname;
     export let titles = ["Name", "Created On", "Status"];
     export let cellData = [
