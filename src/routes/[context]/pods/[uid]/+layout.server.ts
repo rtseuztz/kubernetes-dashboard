@@ -1,4 +1,4 @@
-import type { PodJSON } from "../../../app"
+import type { PodJSON } from "../../../../app"
 
 
 export async function load({ parent, params }) {

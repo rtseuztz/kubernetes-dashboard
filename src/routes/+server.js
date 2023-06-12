@@ -1,17 +1,28 @@
-import { NamespaceEvent, namespace_events } from './data';
+import { Event, events } from './data';
 export const GET = () => {
 
-    const nsevent = new NamespaceEvent();
-    namespace_events.push(nsevent);
+    const event = new Event();
+    events.push(event);
     const stream = new ReadableStream({
         start(controller) {
-            nsevent.on('namespaces', () => {
-                controller.enqueue('event: message\ndata:\n\n');
+            event.on('namespaces', () => {
+                controller.enqueue(`event: message\ndata: ${'namespaces'}\n\n`);
             });
+            event.on('pods', () => {
+                controller.enqueue(`event: message\ndata: ${'pods'}\n\n`);
+            });
+            event.on('services', () => {
+                controller.enqueue(`event: message\ndata: ${'services'}\n\n`);
+            });
+            event.on('deployments', () => {
+                controller.enqueue(`event: message\ndata: ${'deployments'}\n\n`);
+            });
+
+
         },
         cancel() {
-            const nsindex = namespace_events.indexOf(nsevent);
-            if (~nsindex) namespace_events.splice(nsindex, 1);
+            const nsindex = events.indexOf(event);
+            if (~nsindex) events.splice(nsindex, 1);
         }
     });
 

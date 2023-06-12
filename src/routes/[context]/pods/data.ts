@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
-import type { Pod, PodJSON } from '../../app';
-import { initializeResource, watchResource } from '../../script';
+import type { Pod, PodJSON } from '../../../app';
+import { initializeResource, watchResource } from '../../../script';
 
 
 export let pods: PodJSON[] = [];

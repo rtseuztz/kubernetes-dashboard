@@ -21,7 +21,10 @@ export function tableToJSON(tbl: string): any[] {
     return retArr
 }
 export function initializeResource(resource: string, namespace = "", resourceName = ""): any {
+    const cmd = `kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? " -A " : ` -n=${namespace} `}`
+    return initializeResourceString(cmd, CLIReturnType.JSON)
     try {
+
         const res = execSync(`kubectl get ${resource} ${resourceName} -o=json ${namespace === "" ? " -A " : ` -n=${namespace} `}`, { 'shell': 'powershell.exe' })
         const resJson = JSON.parse(res.toString())
         return resJson.items
@@ -32,10 +35,22 @@ export function initializeResource(resource: string, namespace = "", resourceNam
     }
 
 }
+export function initializeResourceString(cmd: string, type: CLIReturnType): any {
+    try {
+        const res = execSync(cmd, { 'shell': 'powershell.exe' })
+        const resJson = convertCLIResToData(res, type)  //JSON.parse(res.toString())
+        return resJson
+    } catch (e: any) {
+        throw error(400, {
+            message: e.message,
+        })
+    }
+
+}
 function convertCLIResToData(data: Buffer, type: CLIReturnType = CLIReturnType.TABLE): any {
     try {
         if (type === CLIReturnType.JSON) {
-            return JSON.parse(data.toString())
+            return JSON.parse(data.toString()).items
         } else if (type === CLIReturnType.TABLE) {
             return tableToJSON(data.toString())
         }

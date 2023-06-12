@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { invalidate } from "$app/navigation";
     import { page } from "$app/stores";
     import Drawer, {
         AppContent,
@@ -10,7 +11,10 @@
     import IconButton from "@smui/icon-button";
     import List, { Graphic, Item, Text } from "@smui/list";
     import TopAppBar, { Row, Section } from "@smui/top-app-bar";
-    let open = true;
+    import { onMount, setContext } from "svelte";
+    import { writable } from "svelte/store";
+    import { namespaces, pods, services } from "./stores.js";
+    let open = false;
     let active = "Home";
     let path: string = $page.url.pathname;
     function setActive(value: string) {
@@ -26,90 +30,82 @@
             tempActive.charAt(0).toUpperCase() + tempActive.substring(1);
         active = tempActive;
     }
+
+    function subscribe() {
+        const sse = new EventSource("/");
+        sse.onmessage = (ev: MessageEvent<string>) => {
+            console.log(ev);
+            invalidate(ev.data);
+        };
+        return () => sse.close();
+    }
+
+    onMount(subscribe);
+
+    export let data;
+    $: namespaces.set(data.namespaces);
+    $: pods.set(data.pods);
+    $: services.set(data.services);
 </script>
 
-<div class="drawer-container">
-    <!-- Don't include fixed={false} if this is a page wide drawer.
+<!-- Don't include fixed={false} if this is a page wide drawer.
         It adds a style for absolute positioning. -->
-    <Drawer variant="dismissible" bind:open>
-        <Header>
-            <Title>Kubernetes Dashboard</Title>
-            <Subtitle>Manage K8s</Subtitle>
-        </Header>
-        <Content>
-            <List>
-                <Item
-                    href="/"
-                    on:click={() => setActive("Home")}
-                    activated={active === "Home"}
-                >
-                    <Graphic class="material-icons" aria-hidden="true"
-                        >home</Graphic
-                    >
-                    <Text>Home</Text>
-                </Item>
-                <Item
-                    href="/pods"
-                    on:click={() => setActive("Pods")}
-                    activated={active === "Pods"}
-                >
-                    <Graphic class="material-icons" aria-hidden="true"
-                        >apps</Graphic
-                    >
-                    <Text>Pods</Text>
-                </Item>
-            </List>
-        </Content>
-    </Drawer>
-
-    <!-- Don't include fixed={false} if this is a page wide drawer.
-        It adds a style for absolute positioning. -->
-    <AppContent class="app-content">
-        <div class="flexy">
-            <div class="top-app-bar-container flexor">
-                <TopAppBar variant="static" dense={true} color={"secondary"}>
-                    <Row>
-                        <Section>
-                            <IconButton
-                                on:click={() => (open = !open)}
-                                class="material-icons">menu</IconButton
-                            >
-                            <Title class="header-title"
-                                ><a href="/">Kubernetes</a></Title
-                            >
-                            {#if pathArr.length > 0}
-                                {#each pathArr as p}
-                                    <pre>{" > "}</pre>
-
+<AppContent class="app-content">
+    <div class="flexy">
+        <div class="top-app-bar-container flexor">
+            <TopAppBar variant="static" dense={true} color={"secondary"}>
+                <Row>
+                    <Section>
+                        <IconButton
+                            on:click={() => (open = !open)}
+                            class="material-icons">menu</IconButton
+                        >
+                        <Title class="header-title"
+                            ><a href="/">Kubernetes</a></Title
+                        >
+                        {#if pathArr.length > 0}
+                            {#each pathArr as p}
+                                <Title class="header-title"
+                                    ><pre>{" > "}</pre></Title
+                                >
+                                <div>
                                     <Title class="header-title"
-                                        ><a href={p}>{p}</a></Title
+                                        ><a
+                                            href={"/" +
+                                                pathArr
+                                                    .join("/")
+                                                    .substring(
+                                                        pathArr
+                                                            .join("")
+                                                            .indexOf(p)
+                                                    )}>{p}</a
+                                        ></Title
                                     >
-                                {/each}
-                            {/if}
-                        </Section>
-                        <Section align="end" toolbar>
-                            <IconButton
-                                class="material-icons"
-                                aria-label="Download">file_download</IconButton
-                            >
-                            <IconButton
-                                class="material-icons"
-                                aria-label="Print this page">print</IconButton
-                            >
-                            <IconButton
-                                class="material-icons"
-                                aria-label="Bookmark this page"
-                                >bookmark</IconButton
-                            >
-                        </Section>
-                    </Row>
-                </TopAppBar>
-                <content class="flexor-content">
-                    <slot />
-                </content>
-            </div>
+                                </div>
+                            {/each}
+                        {/if}
+                    </Section>
+                    <Section align="end" toolbar>
+                        <IconButton class="material-icons" aria-label="Download"
+                            >file_download</IconButton
+                        >
+                        <IconButton
+                            class="material-icons"
+                            aria-label="Print this page">print</IconButton
+                        >
+                        <IconButton
+                            class="material-icons"
+                            aria-label="Bookmark this page">bookmark</IconButton
+                        >
+                    </Section>
+                </Row>
+            </TopAppBar>
+            <content class="flexor-content">
+                <slot />
+            </content>
         </div>
-        <!-- <main class="main-content">
+    </div>
+    <!-- <main class="main-content">
             <Button on:click={() => (open = !open)}>
                 <Label on:click={() => (open = !open)}>Menu</Label>
             </Button>
@@ -119,8 +115,7 @@
                 <slot />
             </content>
         </main> -->
-    </AppContent>
-</div>
+</AppContent>
 
 <style>
     content {
@@ -129,37 +124,12 @@
         align-items: center;
         justify-content: center;
     }
-    /* These classes are only needed because the
-    drawer is in a container on the page. */
-    .drawer-container {
-        position: relative;
-        display: flex;
-        height: 350px;
+
+    .top-app-bar-container {
+        width: 100%;
         height: 98vh;
         border: 1px solid
             var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.1));
-        overflow: hidden;
-        z-index: 0;
-    }
-
-    * :global(.app-content) {
-        flex: auto;
-        overflow: auto;
-        position: relative;
-        flex-grow: 1;
-    }
-
-    .main-content {
-        overflow: auto;
-        padding: 16px;
-        height: 100%;
-        box-sizing: border-box;
-    }
-    .top-app-bar-container {
-        width: 100%;
-        border: 1px solid
-            var(--mdc-theme-text-hint-on-background, rgba(0, 0, 0, 0.1));
-        margin: 0 18px 18px 0;
         background-color: var(--mdc-theme-background, #fff);
 
         overflow: auto;
@@ -189,6 +159,8 @@
         height: 0;
         flex-grow: 1;
         overflow: auto;
+        padding-top: 2vh;
+        justify-content: flex-start;
     }
     /* needed to overwrite drawer title */
     * :global(.header-title) {

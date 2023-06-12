@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import TopAppBar, { Row, Section, Title } from "@smui/top-app-bar";
     import IconButton from "@smui/icon-button";
     import Checkbox from "@smui/checkbox";
@@ -148,4 +148,4 @@
         flex-grow: 1;
         overflow: auto;
     }
-</style>
+</style> -->

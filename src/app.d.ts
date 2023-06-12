@@ -210,3 +210,68 @@ export interface Spec {
 export interface Status {
 	phase: string
 }
+
+export interface ContextTbl {
+	NAME: string
+	CURRENT: string
+	CLUSTER: string
+	AUTHINFO: string
+
+}
+
+export interface ServiceJSON {
+	apiVersion: string
+	items: Item[]
+	kind: string
+	metadata: Metadata2
+}
+
+export interface Item {
+	apiVersion: string
+	kind: string
+	metadata: Metadata
+	spec: Spec
+	status: Status
+}
+
+export interface Metadata {
+	creationTimestamp: string
+	labels: Labels
+	name: string
+	namespace: string
+	resourceVersion: string
+	uid: string
+}
+
+export interface Labels {
+	component: string
+	provider: string
+}
+
+export interface Spec {
+	clusterIP: string
+	clusterIPs: string[]
+	internalTrafficPolicy: string
+	ipFamilies: string[]
+	ipFamilyPolicy: string
+	ports: Port[]
+	sessionAffinity: string
+	type: string
+}
+
+export interface Port {
+	name: string
+	port: number
+	protocol: string
+	targetPort: number
+}
+
+export interface Status {
+	loadBalancer: LoadBalancer
+}
+
+export interface LoadBalancer { }
+
+export interface Metadata2 {
+	resourceVersion: string
+}

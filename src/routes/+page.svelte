@@ -1,60 +1,59 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
-    import { invalidate } from "$app/navigation";
-    import { onMount } from "svelte";
-    import type { NameSpace } from "../app";
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
-    import Checkbox from "@smui/checkbox";
-    import Separator from "@smui/list/src/Separator.svelte";
+    import type { ContextTbl, PodJSON } from "../app";
+    import Graphic from "@smui/list/src/Graphic.svelte";
+    import CustDataTable from "../components/CustDataTable.svelte";
+    export let data: { contexts: ContextTbl[] };
 
-    export let data;
-    let selected: NameSpace[] = [];
-    function subscribe() {
-        const sse = new EventSource("/");
-        sse.onmessage = () => {
-            invalidate("namespaces");
-        };
-        return () => sse.close();
+    function rowMouseOver(e: CustomEvent<any>) {
+        const row = e.currentTarget as HTMLElement;
+        const link = row.querySelector("a.link-cell") as HTMLElement;
+        link.style.visibility = "visible";
     }
-    onMount(subscribe);
+    function rowMouseOut(e: CustomEvent<any>) {
+        const row = e.currentTarget as HTMLElement;
+        const link = row.querySelector("a.link-cell") as HTMLElement;
+        link.style.visibility = "hidden";
+    }
+    export let titles = ["Cluster"];
+    export let cellData = [["CLUSTER"]];
+    export let pipes: any = [];
 </script>
+
+<!-- <CustDataTable dataObj={data.contexts} {titles} {cellData} {pipes} /> -->
 
 <DataTable style="max-width: 100%;">
     <Head>
         <Row>
-            <Cell checkbox>
-                <Checkbox />
-            </Cell>
+            <Cell>Cluster</Cell>
             <Cell />
-            <Cell>Name</Cell>
-            <Cell>Age</Cell>
         </Row>
     </Head>
     <Body>
-        {#each data.namespaces as option}
-            <Row>
-                <Cell checkbox>
-                    <Checkbox
-                        bind:group={selected}
-                        value={option}
-                        valueKey={option.metadata.name}
-                    />
+        {#each data.contexts as option}
+            <Row
+                on:mouseover={rowMouseOver}
+                on:mouseout={rowMouseOut}
+                class="podsWrapper"
+            >
+                <Cell>{option.CLUSTER}</Cell>
+                <Cell>
+                    <a class="link-cell" href={`/${option.CLUSTER.trim()}`}>
+                        <Graphic class="material-icons" aria-hidden="true"
+                            >open_in_new</Graphic
+                        >
+                    </a>
                 </Cell>
-                <Separator />
-                <Cell>{option.metadata.name}</Cell>
-                <Cell numeric
-                    >{new Date(
-                        option.metadata.creationTimestamp
-                    ).toLocaleString()}</Cell
-                >
             </Row>
         {/each}
     </Body>
 </DataTable>
 
-<pre class="status">Selected: {selected
-        .map((option) => option.NAME)
-        .join(", ")}</pre>
-
 <style>
+    a {
+        text-decoration: none;
+    }
+    a.link-cell {
+        visibility: hidden;
+    }
 </style>

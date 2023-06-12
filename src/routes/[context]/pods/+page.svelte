@@ -1,10 +1,10 @@
-<script lang="ts">
+<!-- <script lang="ts">
     import { enhance } from "$app/forms";
     import { invalidate } from "$app/navigation";
     import { onMount } from "svelte";
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
     import Checkbox from "@smui/checkbox";
-    import type { NameSpace, Pod, PodJSON } from "../../app";
+    import type { NameSpace, Pod, PodJSON } from "../../../app";
     import Separator from "@smui/list/src/Separator.svelte";
     import Tooltip, { Wrapper } from "@smui/tooltip";
     import { Content } from "@smui/drawer";
@@ -27,4 +27,4 @@
     a {
         text-decoration: none;
     }
-</style>
+</style> -->

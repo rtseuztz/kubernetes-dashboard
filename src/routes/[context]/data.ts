@@ -1,9 +1,9 @@
 import { EventEmitter } from 'node:events';
-import { CLIReturnType, initializeResource, initializeResourceString, tableToJSON, watchResource } from '../script';
-import type { ContextTbl, NameSpaceJSON, PodJSON, ServiceJSON } from '../app';
+import { CLIReturnType, initializeResource, initializeResourceString, tableToJSON, watchResource } from '../../script';
+import type { ContextTbl, NameSpaceJSON, PodJSON, ServiceJSON } from '../../app';
 
+console.log('data')
 
-export let contexts: ContextTbl[] = [];
 export let namespaces: NameSpaceJSON[] = [];
 export let pods: PodJSON[] = [];
 export let services: ServiceJSON[] = [];
@@ -23,13 +23,15 @@ export class Event extends EventEmitter {
 }
 
 
-contexts = initializeResourceString("kubectl config get-contexts", CLIReturnType.TABLE)
 namespaces = initializeResource("namespaces")
 pods = initializeResource("pods")
 services = initializeResource("services")
 export function send_namespace(ns: NameSpaceJSON[]) {
+    console.log('sending namespaces')
     namespaces = ns;
+    console.log(events.length)
     for (const event of events) {
+        console.log('notifying')
         event.notifyNs();
     }
 }

@@ -1,7 +1,7 @@
 <script lang="ts">
     import DataTable, { Head, Body, Row, Cell } from "@smui/data-table";
     import Checkbox from "@smui/checkbox";
-    import type { PodJSON } from "../../app";
+    import type { PodJSON } from "../../../app";
     import Separator from "@smui/list/src/Separator.svelte";
     import Graphic from "@smui/list/src/Graphic.svelte";
     import IconButton from "@smui/icon-button";
